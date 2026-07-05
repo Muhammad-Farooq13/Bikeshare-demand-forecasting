@@ -1,0 +1,24 @@
+[project]
+name = "bikeshare-demand-forecasting"
+version = "1.0.0"
+description = "Hourly bike-share demand forecasting with time-series-aware validation, SHAP explainability, and a FastAPI serving layer."
+authors = [{ name = "Muhammad Farooq Shafi", email = "mfarooqsgafee333@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

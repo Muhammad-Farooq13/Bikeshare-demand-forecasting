@@ -1,0 +1,54 @@
+data:
+  source_url: "https://raw.githubusercontent.com/muditp19/UCI_Bike-sharing-dataset/master/hour.csv"
+  raw_path: "data/hour_raw.csv"
+  processed_path: "data/hour_features.csv"
+
+split:
+  # Time-based split: never randomly shuffle a time series. Train on the
+  # first ~20 months, validate on the last ~4 months (the most recent data),
+  # mirroring how a forecasting model would actually be evaluated in
+  # production — on data it could not have seen at training time.
+  test_size_days: 120
+  cv_n_splits: 5
+
+features:
+  lag_hours: [1, 24, 168]        # 1 hour ago, same hour yesterday, same hour last week
+  rolling_windows: [24, 168]     # 24h and 7-day rolling means of the target
+  numeric:
+    - temp
+    - atemp
+    - hum
+    - windspeed
+    - lag_1
+    - lag_24
+    - lag_168
+    - roll_mean_24
+    - roll_mean_168
+    - hour_sin
+    - hour_cos
+    - month_sin
+    - month_cos
+    - weekday_sin
+    - weekday_cos
+  categorical:
+    - season
+    - weathersit
+  binary:
+    - holiday
+    - workingday
+  target: cnt
+
+model:
+  type: gradient_boosting
+  artifact_path: models/model.joblib
+  preprocessor_path: models/preprocessor.joblib
+  metrics_path: artifacts/metrics.json
+  random_seed: 42
+
+explainability:
+  shap_sample_size: 300
+  output_path: artifacts/shap_summary.png
+
+api:
+  host: 0.0.0.0
+  port: 8000

@@ -1,0 +1,18 @@
+services:
+  demand-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: bikeshare-demand-api:latest
+    container_name: bikeshare-demand-api
+    ports:
+      - "8000:8000"
+    environment:
+      - CONFIG_PATH=configs/config.yaml
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
